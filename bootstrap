@@ -1,0 +1,30 @@
+#!/bin/bash
+
+export CONFIG_HOME="$HOME/.config"
+mkdir -p "$CONFIG_HOME"
+
+ln -sf "$PWD/nvim" "$CONFIG_HOME/nvim"
+
+ln -sf "$PWD/.bashrc" "$CONFIG_HOME/.bashrc"
+ln -sf "$PWD/.tmux.conf" "$CONFIG_HOME/.tmux.conf"
+
+packages=(
+    fd
+    ripgrep
+    fzf
+    npm
+    lazygit
+    kubectl
+    argocd
+    helm
+    terraform
+    docker
+    azure-cli
+)
+
+for package in "${packages[@]}"; do
+    echo "Installing $package..."
+    brew install "$package"
+done
+
+echo "All packages installed successfully."
