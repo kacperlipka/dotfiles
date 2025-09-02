@@ -1,0 +1,15 @@
+[gpg]
+	format = "openpgp"
+
+[gpg "openpgp"]
+	program = "/nix/store/8dggzrv5nih8myns336b0gqp30czlg8d-gnupg-2.4.8/bin/gpg"
+
+[init]
+	defaultBranch = "main"
+
+[pull]
+	rebase = true
+
+[user]
+	email = "kacper@example.com"
+	name = "Kacper Lipka"

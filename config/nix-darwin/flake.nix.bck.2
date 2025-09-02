@@ -1,0 +1,82 @@
+{
+  description = "Kacper's macOS config with nix-darwin + home-manager + bash + LazyVim";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Twoje dotfiles jako zwykłe repo (bez flake.nix)
+    dotfiles = {
+      url = "github:kacperlipka/dotfiles";
+      flake = false;
+    };
+    # LazyVim starter
+    lazyvim = {
+      url = "github:LazyVim/starter";
+      flake = false;
+    };
+  };
+
+  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, dotfiles, lazyvim, ... }:
+  let
+    user = "kacperlipka"; # zmień na swoją nazwę użytkownika w systemie
+    pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+  in {
+    darwinConfigurations."Kacpers-MacBook-Pro" = nix-darwin.lib.darwinSystem {
+      system = "aarch64-darwin";
+
+      modules = [
+        {
+          nix.settings.experimental-features = "nix-command flakes";
+          environment.systemPackages = with pkgs; [
+            vim fd neovim nodejs_24 fzf ripgrep lazygit kubectl
+          ];
+          system.stateVersion = 6;
+        }
+
+        home-manager.darwinModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+
+          home-manager.users.${user} = {
+	    home.homeDirectory = "/Users/kacperlipka";
+            home.stateVersion = "24.05";
+
+            programs.git.enable = true;
+            programs.fzf.enable = true;
+
+            programs.bash = {
+              enable = true;
+              enableCompletion = true;
+              bashrcExtra = ''
+                alias ll="ls -la"
+                export EDITOR=nvim
+              '';
+            };
+
+            programs.neovim = {
+              enable = true;
+              viAlias = true;
+              vimAlias = true;
+              withNodeJs = true;
+              withPython3 = true;
+              extraPackages = with pkgs; [ tree-sitter ];
+            };
+
+            # symlinkuj pliki z repo dotfiles
+            home.file.".bashrc".source = builtins.toString "${dotfiles}/bashrc";
+
+            # symlinkuj LazyVim jako config do Neovim
+            home.file.".config/nvim".source = builtins.toString lazyvim;
+          };
+        }
+      ];
+    };
+  };
+}
+
