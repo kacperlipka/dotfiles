@@ -1,0 +1,9 @@
+# Starship configuration
+# Add your custom prompt configuration here
+
+format = """
+$all$character"""
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[➜](bold red)"
