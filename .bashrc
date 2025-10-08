@@ -71,3 +71,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# Set up fzf key bindings and fuzzy completion
+eval "$(fzf --bash)"
