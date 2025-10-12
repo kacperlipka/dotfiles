@@ -1,34 +1,53 @@
 # ~/.bashrc
 
-# Source Nix environment
-if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-fi
+##########################################
+# --------------- GENERAL ---------------#
+##########################################
+
+# Set better history
+HISTSIZE=10000
+HISTFILESIZE=20000
+HISTCONTROL=ignoredups:erasedups # avoids duplicates
+shopt -s histappend # appends instead of overwriting the history file
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r" # appends new history lines immediately
+
+# Check window size after each command
+shopt -s checkwinsize
+
+# Set up fzf key bindings and fuzzy completion
+eval "$(fzf --bash)"
 
 # Initialize starship prompt
 if command -v starship &> /dev/null; then
     eval "$(starship init bash)"
 fi
 
-# Useful aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+# Autocomplete for kubectl
+source <(kubectl completion bash)
+complete -o default -F __start_kubectl k
+
+##########################################
+# --------------- ALIASES ---------------#
+##########################################
+
+# grep aliases
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 # Git aliases
-alias gs='git status'
-alias ga='git add'
-alias gc='git commit'
-alias gp='git push'
-alias gl='git pull'
-alias gd='git diff'
-alias gb='git branch'
-alias gco='git checkout'
+if command -v git &> /dev/null; then
+  alias gs='git status'
+  alias ga='git add'
+  alias gc='git commit'
+  alias gp='git push'
+  alias gl='git pull'
+  alias gd='git diff'
+  alias gb='git branch'
+  alias gco='git checkout'
+fi
 
-# Modern replacements (if available)
+# Modern replacements
 if command -v eza &> /dev/null; then
     alias ls='eza'
     alias ll='eza -alF'
@@ -44,33 +63,61 @@ if command -v fd &> /dev/null; then
     alias find='fd'
 fi
 
-# Development aliases
-alias nv='nvim'
-alias vim='nvim'
-
-# Nix aliases for configuration management
-alias nix-rebuild='darwin-rebuild switch --flake ~/.config/nix-config#macos'
-alias nix-update='cd ~/.config/nix-config && nix flake update && cd -'
-
-# Set better history
-export HISTSIZE=10000
-export HISTFILESIZE=20000
-export HISTCONTROL=ignoredups:erasedups
-
-# Append to history, don't overwrite
-shopt -s histappend
-
-# Check window size after each command
-shopt -s checkwinsize
-
-# Enable programmable completion
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+# Vim aliases to Neovim
+if command -v nvim &> /dev/null; then
+  alias nv='nvim'
+  alias vim='nvim'
+  alias v='nvim'
+  alias vi='nvim'
 fi
 
-# Set up fzf key bindings and fuzzy completion
-eval "$(fzf --bash)"
+# Nix aliases for configuration management
+if command -v darwin-rebuild &> /dev/null; then
+  alias nix-rebuild='darwin-rebuild switch --flake ~/.config/nix-config#macos'
+fi
+
+if command -v nix &> /dev/null; then
+  alias nix-update='cd ~/.config/nix-config && nix flake update && cd -'
+fi
+
+# kubectl aliases
+if command -v kubecolor &> /dev/null; then
+  alias k='kubecolor'
+fi
+
+if command -v kubectx &> /dev/null; then
+  alias kctx='kubectx'
+fi
+
+if command -v kubens &> /dev/null; then
+  alias kns='kubens'
+fi
+
+# Kubecolor does not apply to these aliases
+if command -v kubectl &> /dev/null; then
+  # Get commands
+  alias kg='k get'
+  alias kgp='k get pods'
+  alias kgs='k get services'
+  alias kgd='k get deployments'
+  alias kgi='k get ingress'
+  alias kga='k get all'
+
+  # Delete commands
+  alias kdel='k delete'
+  alias kdelp='k delete pod'
+  alias kdels='k delete service'
+  alias kdelr='k delete deployment'
+  alias kdeli='k delete ingress'
+  alias kdela='k delete all'
+
+  # Describe commands
+  alias kd='k describe'
+  alias kdp='k describe pod'
+  alias kds='k describe service'
+  alias kdd='k describe deployment'
+  alias kdi='k describe ingress'
+  alias kda='k describe all'
+
+  alias kl='k logs'
+fi
