@@ -7,8 +7,8 @@
 # Set better history
 HISTSIZE=10000
 HISTFILESIZE=20000
-HISTCONTROL=ignoredups:erasedups # avoids duplicates
-shopt -s histappend # appends instead of overwriting the history file
+HISTCONTROL=ignoredups:erasedups                                                           # avoids duplicates
+shopt -s histappend                                                                        # appends instead of overwriting the history file
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r" # appends new history lines immediately
 
 # Check window size after each command
@@ -18,13 +18,21 @@ shopt -s checkwinsize
 eval "$(fzf --bash)"
 
 # Initialize starship prompt
-if command -v starship &> /dev/null; then
-    eval "$(starship init bash)"
+if command -v starship &>/dev/null; then
+  eval "$(starship init bash)"
 fi
 
 # Autocomplete for kubectl
 source <(kubectl completion bash)
 complete -o default -F __start_kubectl k
+
+# Set neovim as default editor
+export EDITOR=nvim
+export VISUAL=nvim
+export FCEDIT=nvim
+
+# Enable vi keybindings
+set -o vi
 
 ##########################################
 # --------------- ALIASES ---------------#
@@ -36,7 +44,7 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 # Git aliases
-if command -v git &> /dev/null; then
+if command -v git &>/dev/null; then
   alias gs='git status'
   alias ga='git add'
   alias gc='git commit'
@@ -48,23 +56,23 @@ if command -v git &> /dev/null; then
 fi
 
 # Modern replacements
-if command -v eza &> /dev/null; then
-    alias ls='eza'
-    alias ll='eza -alF'
-    alias la='eza -A'
-    alias tree='eza --tree'
+if command -v eza &>/dev/null; then
+  alias ls='eza'
+  alias ll='eza -alF'
+  alias la='eza -A'
+  alias tree='eza --tree'
 fi
 
-if command -v bat &> /dev/null; then
-    alias cat='bat'
+if command -v bat &>/dev/null; then
+  alias cat='bat'
 fi
 
-if command -v fd &> /dev/null; then
-    alias find='fd'
+if command -v fd &>/dev/null; then
+  alias find='fd'
 fi
 
 # Vim aliases to Neovim
-if command -v nvim &> /dev/null; then
+if command -v nvim &>/dev/null; then
   alias nv='nvim'
   alias vim='nvim'
   alias v='nvim'
@@ -72,29 +80,29 @@ if command -v nvim &> /dev/null; then
 fi
 
 # Nix aliases for configuration management
-if command -v darwin-rebuild &> /dev/null; then
+if command -v darwin-rebuild &>/dev/null; then
   alias nix-rebuild='darwin-rebuild switch --flake ~/.config/nix-config#macos'
 fi
 
-if command -v nix &> /dev/null; then
+if command -v nix &>/dev/null; then
   alias nix-update='cd ~/.config/nix-config && nix flake update && cd -'
 fi
 
 # kubectl aliases
-if command -v kubecolor &> /dev/null; then
+if command -v kubecolor &>/dev/null; then
   alias k='kubecolor'
 fi
 
-if command -v kubectx &> /dev/null; then
+if command -v kubectx &>/dev/null; then
   alias kctx='kubectx'
 fi
 
-if command -v kubens &> /dev/null; then
+if command -v kubens &>/dev/null; then
   alias kns='kubens'
 fi
 
 # Kubecolor does not apply to these aliases
-if command -v kubectl &> /dev/null; then
+if command -v kubectl &>/dev/null; then
   # Get commands
   alias kg='k get'
   alias kgp='k get pods'
