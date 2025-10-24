@@ -129,3 +129,24 @@ if command -v kubectl &>/dev/null; then
 
   alias kl='k logs'
 fi
+
+# Start a tmux session automatically if tmux is installed
+if command -v tmux &>/dev/null; then
+  # Only start tmux if not already inside a tmux session
+  if [ -z "$TMUX" ]; then
+    SESSION_NAME="main"
+
+    # Check if session exists
+    if ! tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+      # Create the first window and name it 'shell'
+      tmux new-session -d -s "$SESSION_NAME" -n shell
+
+      # Create additional windows and name them
+      tmux new-window -t "$SESSION_NAME:2" -n ide
+      tmux new-window -t "$SESSION_NAME:3" -n jumphost
+    fi
+
+    # Attach to the session
+    tmux attach -t "$SESSION_NAME"
+  fi
+fi
