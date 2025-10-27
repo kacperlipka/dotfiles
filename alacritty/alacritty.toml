@@ -1,0 +1,31 @@
+[font.normal]
+family = "MesloLGS NF"
+style = "Regular"
+
+[font.bold]
+family = "MesloLGS NF"
+style = "Bold"
+
+[font.italic]
+family = "MesloLGS NF"
+style = "Italic"
+
+[font.bold_italic]
+family = "MesloLGS NF"
+style = "Bold Italic"
+
+[font]
+size = 13.0
+
+[font.offset]
+x = 1   # space between characters
+y = 1  # keep line spacing unchanged
+
+[colors.primary]
+background = "#1e1f2f"
+foreground = "#ffffff"
+
+[[keyboard.bindings]]
+key = "Slash"
+mods = "Control"
+chars = "\u001f"

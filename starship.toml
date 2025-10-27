@@ -1,0 +1,21 @@
+# Starship configuration
+# Add your custom prompt configuration here
+
+format = """$time$kubernetes$all$directory$character"""
+
+[directory]
+style = "#5fd7ff"
+truncate_to_repo = false
+
+[character]
+success_symbol = "[❯](#7dafff)"
+error_symbol = "[❯](bold red)"
+
+[kubernetes]
+disabled = false
+style = "#5fd7ff"
+format = '[$context( \($namespace\))]($style) '
+
+[time]
+disabled = false
+style = "#ff8659"
