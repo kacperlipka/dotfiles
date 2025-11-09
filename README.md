@@ -8,32 +8,16 @@ Personal configuration for shell, terminal, and development tools.
 - Neovim editor with LazyVim
 - Alacritty terminal emulator
 - Bootstrap script for automatic linking
-- Optional package installation script
 
 ## Quick Start
 
 ```bash
-# Install packages (optional - works with brew, apt, dnf, pacman)
-./install-packages.sh
-
 # Link dotfiles
 ./bootstrap.sh
 
 # Apply configuration
 source ~/.bashrc
 ```
-
-## Tools Included
-
-Package installation via `install-packages.sh`:
-
-- **Development**: git, gh, jq, yq, nodejs
-- **Editors**: neovim, ripgrep, fd, fzf, bat, eza
-- **Shell**: starship, tmux
-- **Network**: curl, wget, nmap, netcat
-- **Cloud/DevOps**: azure-cli, kubectl, kubectx, helm, terraform, argocd, ansible
-- **Utilities**: unzip, zip, tree, htop, btop
-- **Languages**: rust, pyenv
 
 ## Configuration Files
 
