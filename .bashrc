@@ -22,7 +22,9 @@ if command -v pyenv &>/dev/null; then
 fi
 
 # Set up fzf key bindings and fuzzy completion
-eval "$(fzf --bash)"
+if command -v fzf &>/dev/null; then
+  eval "$(fzf --bash)"
+fi
 
 # Initialize starship prompt
 if command -v starship &>/dev/null; then
@@ -98,6 +100,8 @@ fi
 # kubectl aliases
 if command -v kubecolor &>/dev/null; then
   alias k='kubecolor'
+elif command -v kubectl &>/dev/null; then
+  alias k='kubectl'
 fi
 
 if command -v kubectx &>/dev/null; then
