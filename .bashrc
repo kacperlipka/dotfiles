@@ -7,9 +7,8 @@
 # Set better history
 HISTSIZE=10000
 HISTFILESIZE=20000
-HISTCONTROL=ignoredups:erasedups                                                           # avoids duplicates
-shopt -s histappend                                                                        # appends instead of overwriting the history file
-PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r" # appends new history lines immediately
+HISTCONTROL=ignoredups:erasedups             # avoids duplicates
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND" # appends new history lines immediately
 
 # Check window size after each command
 shopt -s checkwinsize
