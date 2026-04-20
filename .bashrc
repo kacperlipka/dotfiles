@@ -111,6 +111,14 @@ if command -v kubens &>/dev/null; then
   alias kns='kubens'
 fi
 
+if command -v kind &>/dev/null; then
+  export KIND_EXPERIMENTAL_PROVIDER=podman
+fi
+
+if command -f krew &>/dev/null; then
+  export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+fi
+
 # Kubecolor does not apply to these aliases
 if command -v kubectl &>/dev/null; then
   # Get commands
@@ -138,6 +146,36 @@ if command -v kubectl &>/dev/null; then
   alias kda='k describe all'
 
   alias kl='k logs'
+fi
+
+##########################################
+# --------------- TMUX -----------------#
+##########################################
+
+# In tmux windows with index >= 3, rename the window to the SSH hostname.
+# Restores the original window name on logout.
+if [ -n "$TMUX" ]; then
+  ssh() {
+    local window_index
+    window_index=$(tmux display-message -p '#{window_index}')
+    if (( window_index >= 3 )); then
+      local host=""
+      for arg in "$@"; do
+        if [[ "$arg" != -* ]]; then
+          host="${arg#*@}"  # handles both user@host and plain host
+          break
+        fi
+      done
+      host="$(printf '%s' "$host" | cut -d' ' -f1)"
+      local original_name
+      original_name=$(tmux display-message -p '#{window_name}')
+      [ -n "$host" ] && tmux rename-window "$host"
+      command ssh "$@"
+      tmux rename-window "${original_name:-ssh}"
+    else
+      command ssh "$@"
+    fi
+  }
 fi
 
 # Start a tmux session automatically if tmux is installed
