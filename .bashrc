@@ -158,11 +158,11 @@ if [ -n "$TMUX" ]; then
   ssh() {
     local window_index
     window_index=$(tmux display-message -p '#{window_index}')
-    if (( window_index >= 3 )); then
+    if ((window_index >= 3)); then
       local host=""
       for arg in "$@"; do
         if [[ "$arg" != -* ]]; then
-          host="${arg#*@}"  # handles both user@host and plain host
+          host="${arg#*@}" # handles both user@host and plain host
           break
         fi
       done

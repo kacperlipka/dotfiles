@@ -8,8 +8,8 @@ echo "Setting up dotfiles from $DOTFILES_DIR..."
 
 # Set bash as default shell
 if [[ "$SHELL" != */bash ]]; then
-    chsh -s "$(which bash)"
-    echo "Changed default shell to bash"
+  chsh -s "$(which bash)"
+  echo "Changed default shell to bash"
 fi
 
 # Link dotfiles
@@ -18,6 +18,8 @@ ln -sf "$DOTFILES_DIR/.bashrc" "$HOME/.bashrc"
 echo "  * .bashrc -> $DOTFILES_DIR/.bashrc"
 ln -sf "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
 echo "  * .tmux.conf -> $DOTFILES_DIR/.tmux.conf"
+ln -sf "$DOTFILES_DIR/.inputrc" "$HOME/.inputrc"
+echo "  * .inputrc -> $DOTFILES_DIR/.inputrc"
 
 # Create config directories and link
 echo "Linking config directories..."
@@ -31,10 +33,11 @@ echo "  * .config/alacritty -> $DOTFILES_DIR/alacritty"
 
 # Source bashrc in bash_profile (only if not already present)
 if ! grep -q "source ~/.bashrc" "$HOME/.bash_profile" 2>/dev/null; then
-    echo '[[ -f ~/.bashrc ]] && source ~/.bashrc' >> "$HOME/.bash_profile"
-    echo "Added bashrc sourcing to bash_profile"
+  echo '[[ -f ~/.bashrc ]] && source ~/.bashrc' >>"$HOME/.bash_profile"
+  echo "Added bashrc sourcing to bash_profile"
 else
-    echo "bashrc sourcing already present in bash_profile"
+  echo "bashrc sourcing already present in bash_profile"
 fi
 
 echo "Dotfiles setup complete! Run: source ~/.bashrc"
+
